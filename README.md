@@ -1,5 +1,7 @@
 # NASH CRN Data
 
+## Data definitions
+
 1.	GEOID 
 a.	GEOID should be a character variable with str_length=11.
 b.	Current data set uses variable name, census_tract_fips, for GEOID.
