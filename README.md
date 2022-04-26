@@ -1,6 +1,9 @@
 # NASH CRN Data
 
+April 26, 2022
+
 ## Data definitions
+
 
 1.	GEOID 
 a.	GEOID should be a character variable with str_length=11.
