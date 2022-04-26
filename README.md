@@ -1,5 +1,7 @@
 # NASH CRN Data
 
+April 26, 2022
+
 ## Data definitions
 
 1.	GEOID 
