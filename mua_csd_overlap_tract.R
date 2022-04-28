@@ -87,5 +87,5 @@ mapview::mapview(t, zcol = 'overlaps_csd_mua') +
 mua_tracts <- mua_tracts %>%
   st_drop_geometry()
 
-saveRDS(mua_tracts, 'mua_csd_overlap_tract.rds')
+saveRDS(mua_tracts, 'Data/bySource/mua_csd_overlap_tract.rds')
 
