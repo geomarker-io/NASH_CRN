@@ -573,17 +573,8 @@ ejs <- d %>%
 ejs <- ejs %>%
   mutate(census_tract_fips = stringr::str_sub(block_group_fips, 1, 11)) %>%
   group_by(census_tract_fips) %>%
-  summarize_if(is.numeric, ~mean(.x))
+  summarize_if(is.numeric, ~mean(.x, na.rm=TRUE))
 # N=74001
-
-
-#ejs <- ejs %>%
-#  mutate(census_tract_fips = stringr::str_sub(block_group_fips, 1, 11)) %>%
-#  group_by(census_tract_fips) %>%
-#  summarize_if(is.numeric, ~mean(.x, na.rm=TRUE))
-
-# ej_traffic_proximity n NAs drops from 7007 to 2659
-# ej_major_discharger_water n NAs drops from 29730 to 20179
 
 saveRDS(ejs, 'data/bySource/ej_screen.rds')
 
@@ -631,17 +622,14 @@ og_data <- readRDS("./Data/bySource/og_data.rds")
 data2010 <- reduce(.x = list(all_tracts, acs_data, ct_data, og_data),
             .f = function(.x, .y) left_join(.x, .y, by='census_tract_fips')) 
 
-#> dim(acs_data)
-#[1] 73056    12
-#> dim(ct_data)
-#[1] 73083    18
-#> dim(og_data)
-#[1] 74027    13
+#> dim(acs_data) [1] 73056    12
+#> dim(ct_data)  [1] 73083    18
+#> dim(og_data)  [1] 74027    13
+#> dim(data2010)  [1] 73057    42
 
-saveRDS(data2010, './Data/census_track_level_data_2010.rds')
+saveRDS(data2010, './Data/census_track_level_data_2010CT.rds')
 
-write_csv(data2010, file="./Data/census_track_level_data_2010.csv")
-
+write_csv(data2010, file="./Data/census_track_level_data_2010CT.csv")
 
 
 #### Update 2010 census tracts to 2020 census tracts -----------------------------------
@@ -658,11 +646,11 @@ data2020 <- data2010 %>%
   group_by(census_tract_fips_2020) %>%
   summarize(across(acs_public_assistance_rate:food_insecurity_pct, sum)) %>% 
   mutate(mua = ifelse(is.na(mua), 0, mua),
-         usda_low_food_access_flag = ifelse(is.na(usda_low_food_access_flag), 0, usda_low_food_access_flag))
+         usda_low_food_access_flag = ifelse(is.na(usda_low_food_access_flag), 0, usda_low_food_access_flag)) %>% # Handle NA in 2020 data
   rename(census_tract_fips = census_tract_fips_2020) 
 
-saveRDS(data2020, 'Data/census_track_level_data_2020.rds')
+saveRDS(data2020, 'Data/census_track_level_data_2020CT.rds')
 
-write_csv(data2010, file="./Data/census_track_level_data_2020.csv")
+write_csv(data2010, file="./Data/census_track_level_data_2020CT.csv")
 
 
