@@ -17,6 +17,7 @@ d_states_abb <- tigris::states() %>%
 
 states_abb <- glue::glue("{d_states_abb$abb}{d_states_abb$fips}")
 dwnld_url <- glue::glue("https://www2.census.gov/geo/docs/maps-data/data/rel/trf_txt/{states_abb}trf.txt")
+dir.create("2000_2010_cw", showWarnings = FALSE)
 dest <- glue::glue("2000_2010_cw/{d_states_abb$abb}.txt")
 
 purrr::walk2(dwnld_url, dest, ~ download.file(.x, destfile = .y))
@@ -82,7 +83,6 @@ cw <- purrr::map(dest, ~ read_delim(.x,
 ))
 
 cw <- bind_rows(cw)
-cw
 
 # hc00 <- tigris::tracts(state = 'ohio', county = 'hamilton', year = 2000)
 # hc10 <- tigris::tracts(state = 'ohio', county = 'hamilton', year = 2010)
@@ -112,19 +112,9 @@ cw_sum <- cw %>%
   group_by(census_tract_id_2010) %>%
   summarize(weight_inverse_sum = sum(weight_inverse))
 
+# TODO is this right?
 cw <- left_join(cw, cw_sum, by = "census_tract_id_2010") %>%
   mutate(weight_inverse = weight_inverse / weight_inverse_sum) %>%
   select(-weight_inverse_sum)
 
-saveRDS(cw, "Data/2000_to_2010_tract_cw.rds")
-
-# example
-# fake_data <- tibble(census_tract_id_2000 = c("39061004601",  # 1 2000 tract to 2 2020 tracts
-#                                             "39061000301", "39061000302", "39061000800"), # 3 2000 tracts to 1 2010 tract
-#                    population_2000 = c(100, 30, 40, 50))
-
-# fake_data %>%
-#  left_join(cw, by = "census_tract_id_2000") %>%
-#  mutate(new_pop = population_2000 * weight_inverse) %>%
-#  group_by(census_tract_id_2010) %>%
-#  summarize(new_pop = sum(new_pop))
+saveRDS(cw, "data/2000_to_2010_tract_cw.rds")

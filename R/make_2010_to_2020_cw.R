@@ -1,14 +1,14 @@
-
+library(dplyr)
 
 # 2020 Comparability Relationship File Record Layouts
 # https://www.census.gov/programs-surveys/geography/technical-documentation/records-layout/2020-comp-record-layout.html
 
 url <- "https://www2.census.gov/geo/docs/maps-data/data/rel2020/tract/tab20_tract20_tract10_natl.txt"
-destfile <- "Data/cw/2010_to_2020_tract_cw.txt"
+destfile <- "raw-data/2010_to_2020_tract_cw.txt"
 
 download.file(url, destfile = destfile, mode = "wb")
 
-d <- readr::read_delim("Data/cw/2010_to_2020_tract_cw.txt", delim = "|")
+d <- readr::read_delim("raw-data/2010_to_2020_tract_cw.txt", delim = "|")
 
 cw <- d %>%
   select(

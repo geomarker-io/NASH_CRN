@@ -1,7 +1,9 @@
-cw <- readRDS("Data/2010_to_2020_tract_cw.rds")
+library(dplyr)
+
+cw <- readRDS("data/2010_to_2020_tract_cw.rds")
 
 # Update all variables
-data2010 <- readRDS("./Data/census_track_level_data_2010.rds")
+data2010 <- readRDS("data/nash_crn_census_data_2010.rds")
 
 data2020 <- data2010 %>%
   rename(census_tract_fips_2010 = census_tract_fips) %>%
@@ -16,6 +18,4 @@ data2020 <- data2010 %>%
   # Handle NA in 2020 data
   rename(census_tract_fips = census_tract_fips_2020)
 
-saveRDS(data2020, "Data/census_track_level_data_2020CT.rds")
-
-write_csv(data2010, file = "./Data/census_track_level_data_2020CT.csv")
+saveRDS(data2020, "data/nash_crn_census_data_2020.rds")
