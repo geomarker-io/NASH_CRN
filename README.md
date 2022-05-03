@@ -1,6 +1,6 @@
 # NASH CRN Data
 
-The goal of the R scripts is to compile geospatial data from multiple data sources at census tract level.
+This group of R scripts is used to create a dataset for application of DeGAUSS in the NASH CRN. Run R scripts to compile geospatial data from multiple data sources at census tract level.
 
 Data sources:
 
