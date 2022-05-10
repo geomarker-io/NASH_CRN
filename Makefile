@@ -1,3 +1,14 @@
+all: rds csv
+
+csv: rds
+	R -e "write.csv(readRDS('data/nash_crn_census_data_2010.rds'), 'data/nash_crn_census_data_2010.csv', row.names = F)"
+	R -e "write.csv(readRDS('data/nash_crn_census_data_2020.rds'), 'data/nash_crn_census_data_2020.csv', row.names = F)"
+
+rds: data/nash_crn_census_data_2010.rds data/nash_crn_census_data_2020.rds csv
+
+clean:
+	rm -rfv raw-data
+
 data/states.rds:
 	Rscript R/make_tracts.R
 
@@ -31,13 +42,3 @@ data/2010_to_2020_tract_cw.rds:
 data/nash_crn_census_data_2020.rds: data/2010_to_2020_tract_cw.rds
 	Rscript R/transform_data_to_2020_census_tract_geography.R
 
-rds: data/nash_crn_census_data_2010.rds data/nash_crn_census_data_2020.rds csv
-
-csv: rds
-	R -e "write.csv(readRDS('data/nash_crn_census_data_2010.rds'), 'data/nash_crn_census_data_2010.csv', row.names = F)"
-	R -e "write.csv(readRDS('data/nash_crn_census_data_2020.rds'), 'data/nash_crn_census_data_2020.csv', row.names = F)"
-
-all: rds csv
-
-clean:
-	rm -rfv raw-data
