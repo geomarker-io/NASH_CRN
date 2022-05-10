@@ -40,19 +40,16 @@ food_atlas <-
 
 # feedingamerica.org Data have to be requested; not directly downloadable
 # TODO add this in manually and put download process/url here in comments
-## food_ins <-
-##   readxl::read_excel("raw-data/FANO Projections - March 2021 - Food Insecurity - v2.xlsx", sheet = " County - 2020 Projections") %>%
-##   mutate(FIPS_char = as.character(FIPS)) %>%
-##   mutate(state_county_fips = ifelse(str_length(FIPS_char) == 4,
-##     str_c("0", FIPS_char, sep = ""),
-##     FIPS_char
-##   )) %>%
-##   select(state_county_fips, food_insecurity_pct = `2019 Food Insecurity %`)
-
-## food_data <-
-##   purrr::reduce(list(mrfei, food_atlas, food_ins), full_join, by = "census_tract_fips")
+food_ins <-
+  readxl::read_excel("data/source/FANO Projections - March 2021 - Food Insecurity - v2.xlsx", sheet = " County - 2020 Projections") %>%
+  mutate(FIPS_char = as.character(FIPS)) %>%
+  mutate(state_county_fips = ifelse(str_length(FIPS_char) == 4,
+    str_c("0", FIPS_char, sep = ""),
+    FIPS_char
+  )) %>%
+  select(state_county_fips, food_insecurity_pct = `2019 Food Insecurity %`)
 
 food_data <-
-  purrr::reduce(list(mrfei, food_atlas), full_join, by = "census_tract_fips")
+  purrr::reduce(list(mrfei, food_atlas, food_ins), full_join, by = "census_tract_fips")
 
 saveRDS(food_data, "data/food.rds")
