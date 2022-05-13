@@ -1,3 +1,10 @@
+.cran_packages <- c("tidyverse", "sf")
+.inst <- .cran_packages %in% installed.packages()
+if(any(!.inst)) {
+  install.packages(.cran_packages[!.inst], repos = "http://cran.us.r-project.org")
+}
+
+
 library(tidyverse)
 library(sf)
 
@@ -17,8 +24,8 @@ d_states_abb <- tigris::states() %>%
 
 states_abb <- glue::glue("{d_states_abb$abb}{d_states_abb$fips}")
 dwnld_url <- glue::glue("https://www2.census.gov/geo/docs/maps-data/data/rel/trf_txt/{states_abb}trf.txt")
-dir.create("2000_2010_cw", showWarnings = FALSE)
-dest <- glue::glue("2000_2010_cw/{d_states_abb$abb}.txt")
+dir.create("raw-data/2000_2010_cw", showWarnings = FALSE)
+dest <- glue::glue("raw-data/2000_2010_cw/{d_states_abb$abb}.txt")
 
 purrr::walk2(dwnld_url, dest, ~ download.file(.x, destfile = .y))
 
@@ -84,20 +91,6 @@ cw <- purrr::map(dest, ~ read_delim(.x,
 
 cw <- bind_rows(cw)
 
-# hc00 <- tigris::tracts(state = 'ohio', county = 'hamilton', year = 2000)
-# hc10 <- tigris::tracts(state = 'ohio', county = 'hamilton', year = 2010)
-#
-# mapview::mapviewOptions(fgb = FALSE)
-# mapview::mapview(hc00) + mapview::mapview(hc10)
-#
-# cw %>%
-#   filter(GEOID10 == "39061026400") %>%
-#   select(GEOID00, GEOID10, AREALANDPCT10PT)
-#
-# cw %>%
-#   filter(GEOID00 == "39061004601") %>%
-#   select(GEOID00, GEOID10, AREALANDPCT10PT)
-
 cw <- cw %>%
   select(
     census_tract_id_2000 = GEOID00,
@@ -112,7 +105,6 @@ cw_sum <- cw %>%
   group_by(census_tract_id_2010) %>%
   summarize(weight_inverse_sum = sum(weight_inverse))
 
-# TODO is this right?
 cw <- left_join(cw, cw_sum, by = "census_tract_id_2010") %>%
   mutate(weight_inverse = weight_inverse / weight_inverse_sum) %>%
   select(-weight_inverse_sum)
