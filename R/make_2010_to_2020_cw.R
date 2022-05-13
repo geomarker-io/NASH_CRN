@@ -1,16 +1,23 @@
+.cran_packages <- c("dplyr")
+.inst <- .cran_packages %in% installed.packages()
+if(any(!.inst)) {
+  install.packages(.cran_packages[!.inst], repos = "http://cran.us.r-project.org")
+}
+
 library(dplyr)
 
 # 2020 Comparability Relationship File Record Layouts
 # https://www.census.gov/programs-surveys/geography/technical-documentation/records-layout/2020-comp-record-layout.html
 
-url <- "https://www2.census.gov/geo/docs/maps-data/data/rel2020/tract/tab20_tract20_tract10_natl.txt"
-destfile <- "raw-data/2010_to_2020_tract_cw.txt"
+if (!file.exists("raw-data/2010_to_2020_tract_cw.txt")) {
+  download.file(
+    url = "https://www2.census.gov/geo/docs/maps-data/data/rel2020/tract/tab20_tract20_tract10_natl.txt",
+    destfile = "raw-data/2010_to_2020_tract_cw.txt",
+    mode = "wb"
+  )
+}
 
-download.file(url, destfile = destfile, mode = "wb")
-
-d <- readr::read_delim("raw-data/2010_to_2020_tract_cw.txt", delim = "|")
-
-cw <- d %>%
+cw <- readr::read_delim("raw-data/2010_to_2020_tract_cw.txt", delim = "|") %>%
   select(
     census_tract_fips_2020 = GEOID_TRACT_20,
     census_tract_fips_2010 = GEOID_TRACT_10,
