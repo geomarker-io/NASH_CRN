@@ -1,3 +1,9 @@
+.cran_packages <- c("dplyr", "purrr", "sf", "tigris")
+.inst <- .cran_packages %in% installed.packages()
+if(any(!.inst)) {
+  install.packages(.cran_packages[!.inst], repos = "http://cran.us.r-project.org")
+}
+
 library(dplyr)
 library(purrr)
 library(sf)
@@ -5,6 +11,8 @@ library(sf)
 library(tigris)
 options(tigris_use_cache = TRUE)
 options(tigris_class = "sf")
+
+dir.create("Data", showWarnings = FALSE)
 
 states <-
   states(year = 2010) %>%
