@@ -1,3 +1,9 @@
+.cran_packages <- c("dplyr")
+.inst <- .cran_packages %in% installed.packages()
+if(any(!.inst)) {
+  install.packages(.cran_packages[!.inst], repos = "http://cran.us.r-project.org")
+}
+
 library(dplyr)
 options(timeout = 1000)
 
