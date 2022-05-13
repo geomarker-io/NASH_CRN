@@ -25,8 +25,8 @@ data/food.rds: data/2000_to_2010_tract_cw.rds R/make_food_data.R
 data/index.rds: R/make_index_data.R
 	Rscript R/make_index_data.R
 
-# data/mua.rds: 
-# 	Rscript R/make_mua_data.R
+data/mua.rds: Rscript R/make_mua_data.R 
+	Rscript R/make_mua_data.R
 
 data/nash_crn_census_data_2010.rds: data/tracts.rds data/acs.rds data/ejscreen.rds data/food.rds data/index.rds
 	Rscript R/join_all_saved_data.R
