@@ -6,6 +6,9 @@ if(any(!.inst)) {
 
 library(dplyr)
 
+cw <- readRDS("data/2000_to_2010_tract_cw.rds")
+tracts <- readRDS("Data/tracts.rds")
+
 if (!file.exists("raw-data/mRFEI.xls")) {
   download.file(
     url = "https://stacks.cdc.gov/view/cdc/61367/cdc_61367_DS2.xls",
@@ -13,8 +16,6 @@ if (!file.exists("raw-data/mRFEI.xls")) {
     mode = "wb"
   )
 }
-
-cw <- readRDS("data/2000_to_2010_tract_cw.rds")
 
 mrfei <-
   readxl::read_excel("raw-data/mRFEI.xls") %>%
@@ -43,12 +44,14 @@ food_atlas <-
     low_food_access_flag = LA1and10,
     low_food_access_pop = LAPOP1_10,
     total_pop = Pop2010
-  ) %>%
+  ) %>% 
+  left_join(tracts, ., by = "census_tract_fips") %>%
   mutate(
     usda_low_food_access_flag = ifelse(low_food_access_flag == 1, 1, 0), # 1='Yes'/0='No'
+    usda_low_food_access_flag = ifelse(is.na(low_food_access_flag), 0, low_food_access_flag),
     usda_low_food_access_pct = round(low_food_access_pop / total_pop * 100)
   ) %>%
-  select(census_tract_fips, usda_low_food_access_flag, usda_low_food_access_pct)
+  select(census_tract_fips, usda_low_food_access_flag, usda_low_food_access_pct) 
 
 # feedingamerica.org Data have to be requested; not directly downloadable
 food_ins <-
