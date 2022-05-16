@@ -16,17 +16,12 @@ variables <- names(data2010)[-c(1,2)]
 data2020 <- data2010 %>%
   rename(census_tract_fips_2010 = census_tract_fips) %>%
   left_join(cw, by = "census_tract_fips_2010") %>%
+  filter(!is.na(census_tract_fips_2020)) %>%
   mutate(
 	across(variables[1]:variables[length(variables)], ~ .x * weight_inverse)) %>%
   group_by(census_tract_fips_2020) %>%
   summarize(
 	across(variables[1]:variables[length(variables)], sum)) %>%
-  # TODO put the steps below into the make_data scripts instead of including them here
-  ## mutate(
-  ##   mua = ifelse(is.na(mua), 0, mua),
-  ##   usda_low_food_access_flag = ifelse(is.na(usda_low_food_access_flag), 0, usda_low_food_access_flag)
-  ## ) %>%
-  # Handle NA in 2020 data
   rename(census_tract_fips = census_tract_fips_2020)
 
 saveRDS(data2020, "data/nash_crn_census_data_2020.rds")
