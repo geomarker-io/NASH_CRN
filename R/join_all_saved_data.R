@@ -7,7 +7,7 @@ if(any(!.inst)) {
 library(purrr)
 
 d <-
-  c("tracts", "acs", "ejscreen", "food", "index") %>%
+  c("tracts", "acs", "ejscreen", "food", "index", "mua") %>%
   map(~ readRDS(paste0("data/", ., ".rds"))) %>%
   reduce(dplyr::left_join, by = "census_tract_fips")
 
