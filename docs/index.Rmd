@@ -1,0 +1,27 @@
+---
+title: "NASH CRN"
+author: "Erika Rasnick"
+date: "6/30/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# NASH CRN Census Tract Data
+
+[Download 2010 Data](https://downgit.github.io/#/home?url=https://github.com/geomarker-io/NASH_CRN/blob/main/Data/nash_crn_census_data_2010.csv)
+
+[Download 2020 Data](https://downgit.github.io/#/home?url=https://github.com/geomarker-io/NASH_CRN/blob/main/Data/nash_crn_census_data_2020.csv)
+
+# Data Dictionary
+
+```{r}
+options(knitr.kable.NA = '')
+dd <- readxl::read_excel("../orkin_nash_crn.xlsx")
+knitr::kable(dd, )
+```
+
+[Download Data Dictionary](https://downgit.github.io/#/home?url=https://github.com/geomarker-io/NASH_CRN/blob/main/orkin_nash_crn.xlsx)
+
