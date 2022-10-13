@@ -63,8 +63,13 @@ if (!file.exists("raw-data/SDI2015.xlsx")) {
 
 index$sdi <-
   readxl::read_excel("raw-data/SDI2015.xlsx", col_types = "text") %>%
-  select(census_tract_fips = CT, sdi = sdi_score) %>%
-  mutate(sdi = as.numeric(sdi))
+  mutate(sdi = as.numeric(sdi_score),
+         nchar = nchar(CT)) %>% 
+  mutate(census_tract_fips = ifelse(nchar == 10,
+                                    paste0("0", CT),
+                                    CT)) %>% 
+  select(census_tract_fips, sdi)
+  
 
 if (!file.exists("raw-data/SVI2018.csv")) {
   download.file(
