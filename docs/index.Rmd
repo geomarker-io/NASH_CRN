@@ -11,9 +11,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # NASH CRN Census Tract Data
 
-[Download 2010 Data](https://downgit.github.io/#/home?url=https://github.com/geomarker-io/NASH_CRN/blob/main/Data/nash_crn_census_data_2010.csv)
+[Download 2010 Data](https://github.com/geomarker-io/NASH_CRN/releases/download/v0.1.0/nash_crn_census_data_2010.csv)
 
-[Download 2020 Data](https://downgit.github.io/#/home?url=https://github.com/geomarker-io/NASH_CRN/blob/main/Data/nash_crn_census_data_2020.csv)
+[Download 2020 Data](https://github.com/geomarker-io/NASH_CRN/releases/download/v0.1.0/nash_crn_census_data_2020.csv)
 
 # Data Dictionary
 
